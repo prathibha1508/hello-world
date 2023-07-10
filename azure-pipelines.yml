@@ -12,21 +12,6 @@ variables:
   value: '-Dmaven.repo.local=$(MAVEN_CACHE_FOLDER)'
 
 steps:
-
-# - task: Maven@3
-#   displayName: 'Build JAR File'
-#   inputs:
-#     mavenPomFile: 'pom.xml'
-#     mavenOptions: '-Xmx3072m'
-#     jdkVersionOption: '1.8'
-#     jdkArchitectureOption: 'x64'
-#     mavenAuthenticateFeed: true
-#     publishJUnitResults: false
-#     javaHomeOption: 'JDKVersion'
-#     mavenVersionOption: 'Default'
-#     effectivePomSkip: true
-#     sonarQubeRunAnalysis: false
-#     goals: 'clean install package -DskipTests'
 - task: CmdLine@2
   inputs:
     script: |
@@ -36,15 +21,29 @@ steps:
       mvn -version
       java -version
 - task: Maven@3
+  displayName: 'Build JAR File'
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.8'
     jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+    mavenAuthenticateFeed: true
+    publishJUnitResults: false
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    effectivePomSkip: true
+    sonarQubeRunAnalysis: false
+    goals: 'clean install package -DskipTests'
+# - task: Maven@3
+#   inputs:
+#     mavenPomFile: 'pom.xml'
+#     mavenOptions: '-Xmx3072m'
+#     javaHomeOption: 'JDKVersion'
+#     jdkVersionOption: '1.8'
+#     jdkArchitectureOption: 'x64'
+#     publishJUnitResults: true
+#     testResultsFiles: '**/surefire-reports/TEST-*.xml'
+#     goals: 'package'
 - task: CopyFiles@2
   inputs:
     Contents: '$(Build.SourcesDirectory)/target/*.jar' 
